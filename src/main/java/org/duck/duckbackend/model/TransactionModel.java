@@ -3,6 +3,7 @@ package org.duck.duckbackend.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.duck.duckbackend.entity.TransactionEntity;
+import org.duck.duckbackend.enums.CategoryEnum;
 import org.duck.duckbackend.enums.TypeEnum;
 
 import java.sql.Time;
@@ -25,6 +26,7 @@ public class TransactionModel {
     private Date date;
     private Time time;
     private TypeEnum type;
+    private CategoryEnum category;
     private Long sum;
 
     public static TransactionModel toModel(TransactionEntity entity) {
@@ -36,6 +38,7 @@ public class TransactionModel {
                 .time(entity.getTime())
                 .type(entity.getType())
                 .sum(entity.getSum())
+                .category(entity.getCategory())
                 .build();
     }
 
@@ -56,6 +59,7 @@ public class TransactionModel {
                 .time(model.getTime())
                 .type(model.getType())
                 .sum(model.getSum())
+                .category(model.getCategory())
                 .build();
     }
 

@@ -2,6 +2,7 @@ package org.duck.duckbackend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.duck.duckbackend.enums.CategoryEnum;
 import org.duck.duckbackend.enums.TypeEnum;
 
 import java.sql.Time;
@@ -30,8 +31,9 @@ public class TransactionEntity {
     private Time time;
     @Column(name = "type")
     private TypeEnum type;
+    @Column(name = "category")
+    private CategoryEnum category;
     @Column(name = "sum")
     private Long sum; //!!!В копейках
-    //Категория
     //Пользователь
 }
