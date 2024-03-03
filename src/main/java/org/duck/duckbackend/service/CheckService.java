@@ -1,8 +1,10 @@
 package org.duck.duckbackend.service;
 
 import jakarta.transaction.Transactional;
+import org.duck.duckbackend.entity.BudgetEntity;
 import org.duck.duckbackend.model.CheckModel;
 import org.duck.duckbackend.model.TransactionModel;
+import org.duck.duckbackend.repository.BudgetRepository;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
@@ -24,6 +26,8 @@ public class CheckService {
 
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private BudgetRepository budgetRepository;
 
     @Value("${selenium.webSiteUrl}")
     private String webSiteUrl;
@@ -46,18 +50,23 @@ public class CheckService {
     @Value("${selenium.hubUrl}")
     private String hubUrl;
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     @Transactional
-    public Long checkTransaction(CheckModel checkModel)
-            throws MalformedURLException {
-        TransactionModel transactionModel = new TransactionModel();
+    public Long checkTransaction(CheckModel checkModel) throws MalformedURLException {
         String check = checkFind(checkModel.getDate(), checkModel.getUid());
         String filteredCheck = check.replace(".", "");
         Long checkSum = Long.parseLong(filteredCheck);
-        transactionModel.setUID(checkModel.getUid());
-        transactionModel.setDate(checkModel.getDate());
-        transactionModel.setSum(checkSum);
+        BudgetEntity budgetEntity = budgetRepository.findByName(checkModel.getBudgetName());
+        TransactionModel transactionModel = TransactionModel
+                .builder()
+                .UID(checkModel.getUid())
+                .date(checkModel.getDate())
+                .category(checkModel.getCategory())
+                .type(checkModel.getType())
+                .sum(checkSum)
+                .budget_id(budgetEntity.getId())
+                .build();
         transactionService.transactionSave(transactionModel);
+
         return checkSum;
     }
 

@@ -2,7 +2,8 @@ package org.duck.duckbackend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.duck.duckbackend.enums.CategoryEnum;
+
+import java.util.List;
 
 @Entity
 @Table(name = "budgets")
@@ -20,7 +21,7 @@ public class BudgetEntity {
     @Column(name = "name")
     private String name;
     @Column(name = "category")
-    private CategoryEnum category;
+    private String category;
     @Column(name = "period")
     private String period;
     @Column(name = "sum")
@@ -28,4 +29,6 @@ public class BudgetEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "budget")
+    private List<TransactionEntity> transactions;
 }

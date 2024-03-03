@@ -5,6 +5,7 @@ import org.duck.duckbackend.entity.UserEntity;
 import org.duck.duckbackend.exceptions.UserIsAlreadyExists;
 import org.duck.duckbackend.repository.UserRepository;
 import org.duck.duckbackend.util.Role;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,11 @@ public class UserService {
         var user = getCurrentUser();
         user.setRole(Role.ROLE_ADMIN);
         saveUser(user);
+    }
+
+    public UserEntity findUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        return userRepository.findByUsername(currentPrincipalName);
     }
 }

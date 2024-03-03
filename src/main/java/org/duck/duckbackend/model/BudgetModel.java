@@ -2,7 +2,6 @@ package org.duck.duckbackend.model;
 
 import lombok.*;
 import org.duck.duckbackend.entity.BudgetEntity;
-import org.duck.duckbackend.enums.CategoryEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +14,11 @@ import java.util.List;
 public class BudgetModel {
 
     private Long id;
-    private CategoryEnum category;
+    private String category;
     private String period;
     private Long sum;
     private Long user_id;
+    private List<TransactionModel> transactions;
 
     public static BudgetModel toModel(BudgetEntity entity) {
         return BudgetModel.builder()
@@ -27,6 +27,7 @@ public class BudgetModel {
                 .sum(entity.getSum())
                 .period(entity.getPeriod())
                 .user_id(entity.getUser().getId())
+                .transactions(TransactionModel.toListModel(entity.getTransactions()))
                 .build();
     }
 
@@ -44,6 +45,7 @@ public class BudgetModel {
                 .category(model.getCategory())
                 .sum(model.getSum())
                 .period(model.getPeriod())
+                .transactions(TransactionModel.toListEntity(model.getTransactions()))
                 .build();
     }
 
@@ -53,5 +55,12 @@ public class BudgetModel {
             entities.add(toEntity(model));
         }
         return entities;
+    }
+
+    public List<TransactionModel> getTransactions() {
+        if (transactions == null) {
+            transactions = new ArrayList<>();
+        }
+        return transactions;
     }
 }

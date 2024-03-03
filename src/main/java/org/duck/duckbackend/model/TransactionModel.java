@@ -3,8 +3,6 @@ package org.duck.duckbackend.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.duck.duckbackend.entity.TransactionEntity;
-import org.duck.duckbackend.enums.CategoryEnum;
-import org.duck.duckbackend.enums.TypeEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,24 +17,24 @@ import java.util.List;
 public class TransactionModel {
 
     private Long id;
-    private String name;
     private String UID;
     private String date;
-    private TypeEnum type;
-    private CategoryEnum category;
+    private String type;
+    private String category;
     private Long sum;
     private Long user_id;
+    private Long budget_id;
 
     public static TransactionModel toModel(TransactionEntity entity) {
         return TransactionModel.builder()
                 .id(entity.getId())
-                .name(entity.getName())
                 .UID(entity.getUID())
                 .date(entity.getDate())
                 .type(entity.getType())
                 .sum(entity.getSum())
                 .category(entity.getCategory())
                 .user_id(entity.getUser().getId())
+                .budget_id(entity.getBudget().getId())
                 .build();
     }
 
@@ -51,7 +49,6 @@ public class TransactionModel {
     public static TransactionEntity toEntity(TransactionModel model) {
         return TransactionEntity.builder()
                 .id(model.getId())
-                .name(model.getName())
                 .UID(model.getUID())
                 .date(model.getDate())
                 .type(model.getType())
