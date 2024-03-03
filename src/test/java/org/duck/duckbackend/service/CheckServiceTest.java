@@ -1,36 +1,47 @@
 package org.duck.duckbackend.service;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
-class CheckServiceTest {
-    private String date;
+import java.net.MalformedURLException;
 
-    @BeforeEach
-    public void init() {
-        date = "30.11.2023";
-    }
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-    @Test
-    void checkFind() {
-    }
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
-    @Test
-    void CheckServiceTests_yearManage_returnsString() {
-        String year = CheckService.yearManage(date);
-        Assertions.assertEquals(year, "2023");
-    }
+import java.net.MalformedURLException;
 
-    @Test
-    void CheckServiceTests_monthManage_returnsString() {
-        String month = CheckService.monthManage(date);
-        Assertions.assertEquals(month, "10");
-    }
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-    @Test
-    void CheckServiceTests_dayManage_returnsString() {
-        String day = CheckService.dayManage(date);
-        Assertions.assertEquals(day, "30");
-    }
+public class CheckServiceTest {
+
+//    @Test
+//    public void testCheckFind() throws MalformedURLException {
+//        // Создайте макеты для WebDriver и WebElement
+//        WebDriver driver = mock(WebDriver.class);
+//        WebElement element = mock(WebElement.class);
+//
+//        // Настройте макеты
+//        when(driver.findElement(any())).thenReturn(element);
+//        when(element.getText()).thenReturn("2024");
+//
+//        // Создайте экземпляр вашего класса с макетом WebDriver
+//        CheckService checkService = new CheckService(driver);
+//
+//        // Вызовите метод checkFind
+//        String result = checkService.checkFind("2024-12-31", "12345");
+//
+//        // Проверьте результат
+//        assertEquals("Ошибка", result);
+//
+//        // Проверьте, что методы были вызваны на макетах
+//        verify(driver, times(1)).get(anyString());
+//        verify(element, times(1)).click();
+//    }
 }

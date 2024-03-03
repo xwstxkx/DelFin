@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
@@ -17,12 +18,34 @@ import java.time.Duration;
 @Service
 public class CheckService {
 
+    @Value("${selenium.webSiteUrl}")
+    private String webSiteUrl;
+
+    @Value("${selenium.dateUrl}")
+    private String dateUrl;
+    @Value("${selenium.switchUrl}")
+    private String switchUrl;
+    @Value("${selenium.dateClickUrl}")
+    private String dateClickUrl;
+    @Value("${selenium.yearUrl}")
+    private String yearUrl;
+    @Value("${selenium.uidUrl}")
+    private String uidUrl;
+    @Value("${selenium.buttonUrl}")
+    private String buttonUrl;
+    @Value("${selenium.checkUrl}")
+    private String checkUrl;
+    @Value("${selenium.browserName}")
+    private String browserName;
+    @Value("${selenium.hubUrl}")
+    private String hubUrl;
+
     public String checkFind(String date, String uid) throws MalformedURLException {
 
         DesiredCapabilities cap = new DesiredCapabilities();
-        cap.setBrowserName("chrome");
+        cap.setBrowserName(browserName);
         cap.setPlatform(Platform.LINUX);
-        URL url = new URL("http://172.18.0.3:4444/wd/hub");
+        URL url = new URL(hubUrl);
         WebDriver driver = new RemoteWebDriver(url, cap);
 
         String year = yearManage(date);
@@ -31,26 +54,26 @@ public class CheckService {
         String check;
         boolean bool = true;
         //Сайт с которым будем работать
-        driver.get("https://ch.info-center.by/");
+        driver.get(webSiteUrl);
 
         //Начало ввода даты/открытие окна с вводом
         WebElement dateElement = driver.findElement(By
-                .xpath("//input[@placeholder='Выберите дату']"));
+                .xpath(dateUrl));
         dateElement.click();
 
         //Переключатель
         WebElement switchLeft = driver.findElement(By
-                .xpath("//div[@class='air-datepicker-nav--action']"));
+                .xpath(switchUrl));
 
         //Открытие окна с датой
         WebElement dateClick = driver.findElement(By
-                .xpath("//div[@class='air-datepicker-nav--title']"));
+                .xpath(dateClickUrl));
         dateClick.click();
 
         //Поиск подходящего года
         while (bool) {
             WebElement yearFind = driver.findElement(By
-                    .xpath("//div[@class='air-datepicker-nav--title']"));
+                    .xpath(yearUrl));
             if (!yearFind.getText().equalsIgnoreCase(year)) {
                 switchLeft.click();
             } else {
@@ -72,13 +95,13 @@ public class CheckService {
 
         //Ввод Уникального идентификатора
         WebElement uidElement = driver.findElement(By
-                .xpath("//div[@class='qr-inp']//input[@class='_required']"));
+                .xpath(uidUrl));
         uidElement.sendKeys(uid);
 
         //Кнопка "Проверить чек"
         WebElement submitButton = (new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(By
-                        .xpath("(//button[@form='check1'])[1]"))));
+                        .xpath(buttonUrl))));
         System.out.println(submitButton);
         submitButton.click();
 
@@ -87,7 +110,7 @@ public class CheckService {
         //Вычесление итоговой суммы
         WebElement checkElement = (new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(By
-                        .xpath("//div[@class='check-full__total-main']//span[2]"))));
+                        .xpath(checkUrl))));
         check = checkElement.getText();
 
         //!!!
