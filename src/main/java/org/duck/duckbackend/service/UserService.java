@@ -7,35 +7,33 @@ import org.duck.duckbackend.repository.UserRepository;
 import org.duck.duckbackend.util.Role;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository repository;
+
+    private final UserRepository userRepository;
 
     public UserEntity saveUser(UserEntity user) {
-        return repository.save(user);
+        return userRepository.save(user);
     }
+
     public void createUser(UserEntity user) throws UserIsAlreadyExists {
-        if (repository.existsByUsername(user.getUsername())) {
+        if (userRepository.existsByUsername(user.getUsername())) {
             // Заменить на свои исключения
             throw new UserIsAlreadyExists();
         }
 
-        if (repository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserIsAlreadyExists();
         }
-        
+
         saveUser(user);
     }
 
     public UserEntity getByUsername(String username) {
-        return repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "Пользователь с тамим никнеймом не найден"
-                ));
+        return userRepository.findByUsername(username);
 
     }
 

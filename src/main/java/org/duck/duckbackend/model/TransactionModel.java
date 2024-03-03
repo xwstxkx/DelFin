@@ -6,9 +6,7 @@ import org.duck.duckbackend.entity.TransactionEntity;
 import org.duck.duckbackend.enums.CategoryEnum;
 import org.duck.duckbackend.enums.TypeEnum;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,11 +21,11 @@ public class TransactionModel {
     private Long id;
     private String name;
     private String UID;
-    private Date date;
-    private Time time;
+    private String date;
     private TypeEnum type;
     private CategoryEnum category;
     private Long sum;
+    private Long user_id;
 
     public static TransactionModel toModel(TransactionEntity entity) {
         return TransactionModel.builder()
@@ -35,10 +33,10 @@ public class TransactionModel {
                 .name(entity.getName())
                 .UID(entity.getUID())
                 .date(entity.getDate())
-                .time(entity.getTime())
                 .type(entity.getType())
                 .sum(entity.getSum())
                 .category(entity.getCategory())
+                .user_id(entity.getUser().getId())
                 .build();
     }
 
@@ -56,14 +54,13 @@ public class TransactionModel {
                 .name(model.getName())
                 .UID(model.getUID())
                 .date(model.getDate())
-                .time(model.getTime())
                 .type(model.getType())
                 .sum(model.getSum())
                 .category(model.getCategory())
                 .build();
     }
 
-    public static List<TransactionEntity> toEntityModel(List<TransactionModel> models) {
+    public static List<TransactionEntity> toListEntity(List<TransactionModel> models) {
         List<TransactionEntity> entities = new ArrayList<>();
         for (TransactionModel model : models) {
             entities.add(toEntity(model));

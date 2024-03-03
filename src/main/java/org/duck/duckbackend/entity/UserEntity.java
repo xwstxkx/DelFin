@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,6 +33,24 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<TransactionEntity> transactions;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<BudgetEntity> budgets;
+
+    public List<TransactionEntity> getTransactions() {
+        if (transactions == null) {
+            transactions = new ArrayList<>();
+        }
+        return transactions;
+    }
+
+    public List<BudgetEntity> getBudgets() {
+        if (budgets == null) {
+            budgets = new ArrayList<>();
+        }
+        return budgets;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

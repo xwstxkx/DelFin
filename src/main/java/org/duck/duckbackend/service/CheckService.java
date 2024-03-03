@@ -1,5 +1,8 @@
 package org.duck.duckbackend.service;
 
+import jakarta.transaction.Transactional;
+import org.duck.duckbackend.model.CheckModel;
+import org.duck.duckbackend.model.TransactionModel;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +11,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +22,11 @@ import java.time.Duration;
 @Service
 public class CheckService {
 
+    @Autowired
+    private TransactionService transactionService;
+
     @Value("${selenium.webSiteUrl}")
     private String webSiteUrl;
-
     @Value("${selenium.dateUrl}")
     private String dateUrl;
     @Value("${selenium.switchUrl}")
@@ -39,6 +45,21 @@ public class CheckService {
     private String browserName;
     @Value("${selenium.hubUrl}")
     private String hubUrl;
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    @Transactional
+    public Long checkTransaction(CheckModel checkModel)
+            throws MalformedURLException {
+        TransactionModel transactionModel = new TransactionModel();
+        String check = checkFind(checkModel.getDate(), checkModel.getUid());
+        String filteredCheck = check.replace(".", "");
+        Long checkSum = Long.parseLong(filteredCheck);
+        transactionModel.setUID(checkModel.getUid());
+        transactionModel.setDate(checkModel.getDate());
+        transactionModel.setSum(checkSum);
+        transactionService.transactionSave(transactionModel);
+        return checkSum;
+    }
 
     public String checkFind(String date, String uid) throws MalformedURLException {
 
