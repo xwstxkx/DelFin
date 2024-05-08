@@ -35,4 +35,4 @@ build/
 ### DOCKER ###
 /docker-compose.yml
 /Dockerfile
-src/main/resources/application.yml
+src/main/resources/application.yaml
