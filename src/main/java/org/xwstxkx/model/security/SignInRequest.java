@@ -1,4 +1,4 @@
-package org.xwstxkx.model;
+package org.xwstxkx.model.security;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import lombok.Data;
 @Schema(description = "Запрос на аутентификацию")
 public class SignInRequest {
 
-    @Schema(description = "Имя пользователя", example = "Jon")
+    @Schema(description = "Имя пользователя", example = "John")
     @Size(min = 5, max = 50, message = "Имя пользователя должно содержать от 5 до 50 символов")
     @NotBlank(message = "Имя пользователя не может быть пустыми")
     private String username;

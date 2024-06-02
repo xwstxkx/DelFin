@@ -1,12 +1,14 @@
-package org.xwstxkx.service;
+package org.xwstxkx.service.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.xwstxkx.entity.UserEntity;
+import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.exceptions.ObjectWithThisNameIsAlreadyExists;
-import org.xwstxkx.model.JwtResponse;
-import org.xwstxkx.model.SignInRequest;
-import org.xwstxkx.model.SignUpRequest;
+import org.xwstxkx.model.security.JwtResponse;
+import org.xwstxkx.model.security.SignInRequest;
+import org.xwstxkx.model.security.SignUpRequest;
+import org.xwstxkx.service.crud.BudgetsCRUDService;
 import org.xwstxkx.util.Role;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +21,12 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final UserService userService;
-    private final BudgetService budgetService;
+    private final BudgetsCRUDService budgetsCRUDService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public JwtResponse signUp(SignUpRequest request) throws ObjectWithThisNameIsAlreadyExists {
+    public JwtResponse signUp(SignUpRequest request) throws ObjectWithThisNameIsAlreadyExists, ObjectNotFound {
 
         var user = UserEntity.builder()
                 .username(request.getUsername())
@@ -35,8 +37,9 @@ public class AuthenticationService {
 
         userService.createUser(user);
         log.info("Пользователь создан");
-        budgetService.createBudgetSignup(user);
+        budgetsCRUDService.createBudgetSignup(user);
         log.info("Базовые бюджеты пользователя созданы");
+
 
         var jwt = jwtService.generateToken(user);
         log.info("Токен сгенерирован");

@@ -15,10 +15,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.BudgetEntity;
 import org.xwstxkx.entity.UserEntity;
+import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.model.CheckModel;
-import org.xwstxkx.model.TransactionModel;
+import org.xwstxkx.model.ExpenseModel;
 import org.xwstxkx.repository.BudgetRepository;
+import org.xwstxkx.service.crud.ExpensesCRUDService;
+import org.xwstxkx.service.security.UserService;
+import org.xwstxkx.util.CategoryType;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,11 +33,11 @@ import java.time.Duration;
 public class CheckService {
 
     @Autowired
-    private TransactionService transactionService;
-    @Autowired
     private BudgetRepository budgetRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ExpensesCRUDService expensesCRUDService;
 
     @Value("${selenium.webSiteUrl}")
     private String webSiteUrl;
@@ -57,8 +61,8 @@ public class CheckService {
     private String hubUrl;
 
     @Transactional
-    public Long checkTransaction(CheckModel checkModel) throws MalformedURLException, ObjectNotFound {
-        String check = checkFind(checkModel.getDate(), checkModel.getUid());
+    public Long checkTransaction(CheckModel checkModel, Long category_id) throws MalformedURLException, ObjectNotFound, BadCredentials {
+        String check = checkFind(String.valueOf(checkModel.getDate()), checkModel.getUid());
         if (check != null) {
             log.info("Чек найден");
         }
@@ -67,15 +71,16 @@ public class CheckService {
         UserEntity userEntity = userService.getCurrentUser();
         BudgetEntity budgetEntity = budgetRepository.findByTitleAndUser(checkModel.getBudgetTitle(), userEntity);
         log.info("Бюджет был найден");
-        TransactionModel transactionModel = TransactionModel.builder()
-                .uid(checkModel.getUid())
+        ExpenseModel expenseModel = ExpenseModel
+                .builder()
+                .amount(checkSum)
                 .date(checkModel.getDate())
-                .category(checkModel.getCategory())
-                .type(checkModel.getType())
-                .sum(checkSum)
+                .category_id(category_id)
+                .type(CategoryType.valueOf("expense"))
+                .description(checkModel.getUid())
                 .budget_id(budgetEntity.getId())
                 .build();
-        transactionService.transactionSave(transactionModel, budgetEntity.getId());
+        expensesCRUDService.saveExpense(expenseModel, category_id);
         log.info("Транзакция была сохранена");
 
         return checkSum;
@@ -148,8 +153,6 @@ public class CheckService {
         submitButton.click();
 
 
-        //Почему только 1 запрос
-        //Исправить + добавить мультипоточность
         //Вычесление итоговой суммы
         WebElement checkElement = (new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(By

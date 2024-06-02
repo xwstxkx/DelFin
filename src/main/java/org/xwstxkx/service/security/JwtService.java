@@ -1,4 +1,4 @@
-package org.xwstxkx.service;
+package org.xwstxkx.service.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

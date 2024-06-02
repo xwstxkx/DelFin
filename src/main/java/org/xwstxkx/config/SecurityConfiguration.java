@@ -1,7 +1,7 @@
 package org.xwstxkx.config;
 
 import lombok.RequiredArgsConstructor;
-import org.xwstxkx.service.UserService;
+import org.xwstxkx.service.security.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

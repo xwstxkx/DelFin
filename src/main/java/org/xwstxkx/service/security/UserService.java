@@ -1,4 +1,4 @@
-package org.xwstxkx.service;
+package org.xwstxkx.service.security;
 
 import lombok.RequiredArgsConstructor;
 import org.xwstxkx.entity.UserEntity;
@@ -16,8 +16,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserEntity saveUser(UserEntity user) {
-        return userRepository.save(user);
+    public String saveUser(UserEntity user) {
+        userRepository.save(user);
+        return "Пользователь сохранён";
     }
 
     public void createUser(UserEntity user) throws ObjectWithThisNameIsAlreadyExists {

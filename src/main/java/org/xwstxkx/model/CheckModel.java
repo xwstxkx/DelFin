@@ -1,18 +1,21 @@
 package org.xwstxkx.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Модель сканирования чека")
 public class CheckModel {
 
     private String uid;
-    private String date;
-    private String category;
-    private String type;
+    private LocalDate date;
+    private Long category_id;
     private String budgetTitle;
 
 }

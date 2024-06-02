@@ -36,13 +36,14 @@ public class UserEntity implements UserDetails {
     private Role role;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<BudgetEntity> budgets;
-
-    public List<BudgetEntity> getBudgets() {
-        if (budgets == null) {
-            budgets = new ArrayList<>();
-        }
-        return budgets;
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<DebtEntity> debts;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<ExpenseEntity> expenses;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<IncomeEntity> incomes;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<LoanEntity> loans;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -67,5 +68,12 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public List<BudgetEntity> getBudgets() {
+        if (budgets == null) {
+            budgets = new ArrayList<>();
+        }
+        return budgets;
     }
 }

@@ -1,0 +1,42 @@
+package org.xwstxkx.entity;
+
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import lombok.*;
+import org.xwstxkx.util.CategoryType;
+
+import java.time.LocalDate;
+
+@Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "incomes")
+public class IncomeEntity {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "amount")
+    private Long amount;
+    @Column(name = "date")
+    private LocalDate date;
+    @Column(name = "type")
+    private CategoryType type;
+    @Column(name = "description")
+    private String description;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @Schema(description = "Пользователь")
+    private UserEntity user;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
+    @ManyToOne
+    @JoinColumn(name = "budget_id")
+    private BudgetEntity budget;
+}

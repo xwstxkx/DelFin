@@ -17,21 +17,23 @@ public class BudgetModel {
 
     private Long id;
     private String title;
-    private String category;
     private LocalDate periodEnd;
     private Long sum;
     private Long user_id;
-    private List<TransactionModel> transactions;
+    private Long category_id;
+    private List<ExpenseModel> expenses;
+    private List<IncomeModel> incomes;
 
     public static BudgetModel toModel(BudgetEntity entity) {
         return BudgetModel.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
-                .category(entity.getCategory())
+                .category_id(entity.getCategory().getId())
                 .sum(entity.getSum())
                 .periodEnd(entity.getPeriodEnd())
                 .user_id(entity.getUser().getId())
-                .transactions(TransactionModel.toListModel(entity.getTransactions()))
+                .expenses(ExpenseModel.toListModel(entity.getExpenses()))
+                .incomes(IncomeModel.toListModel(entity.getIncomes()))
                 .build();
     }
 
@@ -44,17 +46,13 @@ public class BudgetModel {
     }
 
     public static BudgetEntity toEntity(BudgetModel model) throws ObjectNotFound {
-//        if (LocalDate.now().isAfter(model.getPeriodEnd())) {
-//
-//        } Завязка к накопительному бюджету по истечении времени,
-//        в методе toModel сделать так же
         return BudgetEntity.builder()
                 .id(model.getId())
                 .title(model.getTitle())
-                .category(model.getCategory())
                 .sum(model.getSum())
                 .periodEnd(model.getPeriodEnd())
-                .transactions(TransactionModel.toListEntity(model.getTransactions()))
+                .expenses(ExpenseModel.toListEntity(model.getExpenses()))
+                .incomes(IncomeModel.toListEntity(model.getIncomes()))
                 .build();
     }
 
@@ -66,10 +64,17 @@ public class BudgetModel {
         return entities;
     }
 
-    public List<TransactionModel> getTransactions() {
-        if (transactions == null) {
-            transactions = new ArrayList<>();
+    public List<IncomeModel> getIncomes() {
+        if (incomes == null) {
+            incomes = new ArrayList<>();
         }
-        return transactions;
+        return incomes;
+    }
+
+    public List<ExpenseModel> getExpenses() {
+        if (expenses == null) {
+            expenses = new ArrayList<>();
+        }
+        return expenses;
     }
 }
