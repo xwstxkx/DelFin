@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.xwstxkx.entity.DebtEntity;
+import org.xwstxkx.util.CategoryType;
 import org.xwstxkx.util.Status;
 
 import java.time.LocalDate;
@@ -37,6 +38,10 @@ public class DebtsModel {
     @Schema(description = "Статус долга", example = "ACTIVE")
     @NotBlank(message = "Статус долга должен быть выбран")
     private Status status;
+    @Schema(description = "Тип категорий долга", example = "DEBT")
+    @Size(min = 1, max = 50, message = "Тип категорий долгов должен содержать от 1 до 50 символов")
+    @NotBlank(message = "Тип категории долга должен быть указан")
+    private CategoryType type;
     @Schema(description = "Коментарий долга (необязательный)", example = "Взял 50, вернёт 55")
     @Size(max = 1000, message = "Описание должно быть не более 1000 символов")
     private String description;
@@ -49,6 +54,7 @@ public class DebtsModel {
                 .date(entity.getDate())
                 .dueDate(entity.getDueDate())
                 .status(entity.getStatus())
+                .type(entity.getType())
                 .description(entity.getDescription())
                 .build();
     }
@@ -69,6 +75,7 @@ public class DebtsModel {
                 .date(model.getDate())
                 .dueDate(model.getDueDate())
                 .status(model.getStatus())
+                .type(model.getType())
                 .description(model.getDescription())
                 .build();
     }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.xwstxkx.entity.LoanEntity;
 import org.xwstxkx.exceptions.ObjectNotFound;
+import org.xwstxkx.util.CategoryType;
 import org.xwstxkx.util.Status;
 
 import java.time.LocalDate;
@@ -38,6 +39,10 @@ public class LoanModel {
     @Schema(description = "Статус займа", example = "ACTIVE")
     @NotBlank(message = "Статус займа должен быть выбран")
     private Status status;
+    @Schema(description = "Тип категорий займа", example = "LOAN")
+    @Size(min = 1, max = 50, message = "Тип категорий займов должен содержать от 1 до 50 символов")
+    @NotBlank(message = "Тип категории займа должен быть указан")
+    private CategoryType type;
     @Schema(description = "Коментарий займа (необязательный)", example = "Взял 50, вернёт 55")
     @Size(max = 1000, message = "Описание должно быть не более 1000 символов")
     private String description;
@@ -50,6 +55,7 @@ public class LoanModel {
                 .date(entity.getDate())
                 .dueDate(entity.getDueDate())
                 .status(entity.getStatus())
+                .type(entity.getType())
                 .description(entity.getDescription())
                 .build();
     }
@@ -70,6 +76,7 @@ public class LoanModel {
                 .date(model.getDate())
                 .dueDate(model.getDueDate())
                 .status(model.getStatus())
+                .type(model.getType())
                 .description(model.getDescription())
                 .build();
     }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.xwstxkx.util.CategoryType;
 import org.xwstxkx.util.Status;
 
 import java.time.LocalDate;
@@ -31,14 +32,17 @@ public class LoanEntity {
     @Column(name = "date")
     @NotBlank(message = "Дата вадачи займа должна быть указана")
     private LocalDate date;
-    @Column(name = "dueDate")
+    @Column(name = "due_date")
     @NotBlank(message = "Дата погашения займа должна быть указана")
     private LocalDate dueDate;
     @Column(name = "status")
     @NotBlank(message = "Статус займа должен быть выбран")
     private Status status;
+    @Size(min = 1, max = 50, message = "Тип категорий займов должен содержать от 1 до 50 символов")
+    @NotBlank(message = "Тип категории займа должен быть указан")
+    private CategoryType type;
     @Column(name = "description")
-    @Size(min = 0, max = 1000, message = "Описание должно быть не более 1000 символов")
+    @Size(max = 1000, message = "Описание должно быть не более 1000 символов")
     private String description;
     @ManyToOne
     @JoinColumn(name = "user_id")
