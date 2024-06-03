@@ -15,7 +15,5 @@ public class CheckModel {
 
     private String uid;
     private LocalDate date;
-    private Long category_id;
-    private String budgetTitle;
 
 }

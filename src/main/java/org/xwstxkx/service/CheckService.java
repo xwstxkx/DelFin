@@ -13,14 +13,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.xwstxkx.entity.BudgetEntity;
+import org.xwstxkx.entity.ExpenseEntity;
 import org.xwstxkx.entity.UserEntity;
-import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
+import org.xwstxkx.model.CategoryModel;
 import org.xwstxkx.model.CheckModel;
-import org.xwstxkx.model.ExpenseModel;
-import org.xwstxkx.repository.BudgetRepository;
-import org.xwstxkx.service.crud.ExpensesCRUDService;
+import org.xwstxkx.repository.ExpenseRepository;
+import org.xwstxkx.service.crud.CategoriesCRUDService;
 import org.xwstxkx.service.security.UserService;
 import org.xwstxkx.util.CategoryType;
 
@@ -32,12 +31,14 @@ import java.time.Duration;
 @Slf4j
 public class CheckService {
 
-    @Autowired
-    private BudgetRepository budgetRepository;
+
     @Autowired
     private UserService userService;
     @Autowired
-    private ExpensesCRUDService expensesCRUDService;
+    private CategoriesCRUDService categoriesCRUDService;
+    @Autowired
+    private ExpenseRepository expenseRepository;
+
 
     @Value("${selenium.webSiteUrl}")
     private String webSiteUrl;
@@ -61,26 +62,28 @@ public class CheckService {
     private String hubUrl;
 
     @Transactional
-    public Long checkTransaction(CheckModel checkModel, Long category_id) throws MalformedURLException, ObjectNotFound, BadCredentials {
+    public Long checkTransaction(CheckModel checkModel, Long category_id) throws MalformedURLException, ObjectNotFound {
         String check = checkFind(String.valueOf(checkModel.getDate()), checkModel.getUid());
         if (check != null) {
             log.info("Чек найден");
         }
+        assert check != null;
         String filteredCheck = check.replace(".", "");
         Long checkSum = Long.parseLong(filteredCheck);
         UserEntity userEntity = userService.getCurrentUser();
-        BudgetEntity budgetEntity = budgetRepository.findByTitleAndUser(checkModel.getBudgetTitle(), userEntity);
         log.info("Бюджет был найден");
-        ExpenseModel expenseModel = ExpenseModel
+        ExpenseEntity expenseEntity = ExpenseEntity
                 .builder()
                 .amount(checkSum)
                 .date(checkModel.getDate())
-                .category_id(category_id)
+                .category(CategoryModel.toEntity(
+                        categoriesCRUDService.getCategory(category_id))
+                )
+                .user(userEntity)
                 .type(CategoryType.valueOf("expense"))
                 .description(checkModel.getUid())
-                .budget_id(budgetEntity.getId())
                 .build();
-        expensesCRUDService.saveExpense(expenseModel, category_id);
+        expenseRepository.save(expenseEntity);
         log.info("Транзакция была сохранена");
 
         return checkSum;
@@ -103,21 +106,21 @@ public class CheckService {
         driver.get(webSiteUrl);
         log.info("Драйвер подключился в сайту");
 
-        //Начало ввода даты/открытие окна с вводом
+        log.info("Начало ввода даты/открытие окна с вводом");
         WebElement dateElement = driver.findElement(By
                 .xpath(dateUrl));
         dateElement.click();
 
-        //Переключатель
+        log.info("Переключатель");
         WebElement switchLeft = driver.findElement(By
                 .xpath(switchUrl));
 
-        //Открытие окна с датой
+        log.info("Открытие окна с датой");
         WebElement dateClick = driver.findElement(By
                 .xpath(dateClickUrl));
         dateClick.click();
 
-        //Поиск подходящего года
+        log.info("Поиск подходящего года");
         while (bool) {
             WebElement yearFind = driver.findElement(By
                     .xpath(yearUrl));
@@ -128,24 +131,24 @@ public class CheckService {
             }
         }
 
-        //Поиск подходящего месяца
+        log.info("Поиск подходящего месяца");
         WebElement monthFind = driver.findElement(By
                 .xpath("//div[@class='air-datepicker-body--cells -months-']" +
                         "//div[@data-month='" + month + "']"));
         monthFind.click();
 
-        //Поиск подходящей даты
+        log.info("Поиск подходящей даты");
         WebElement dayFind = driver.findElement(By
                 .xpath("//div[@class='air-datepicker-body--cells -days-']" +
                         "//div[@data-date='" + day + "']"));
         dayFind.click();
 
-        //Ввод Уникального идентификатора
+        log.info("Ввод Уникального идентификатора");
         WebElement uidElement = driver.findElement(By
                 .xpath(uidUrl));
         uidElement.sendKeys(uid);
 
-        //Кнопка "Проверить чек"
+        log.info("Кнопка 'Проверить чек'");
         WebElement submitButton = (new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(By
                         .xpath(buttonUrl))));
@@ -153,7 +156,7 @@ public class CheckService {
         submitButton.click();
 
 
-        //Вычесление итоговой суммы
+        log.info("Вычесление итоговой суммы");
         WebElement checkElement = (new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(By
                         .xpath(checkUrl))));
@@ -168,13 +171,13 @@ public class CheckService {
     }
 
     public static String yearManage(String date) {
-        String[] dates = date.split("\\.");
+        String[] dates = date.split("-");
 
-        return dates[2];
+        return dates[0];
     }
 
     public static String monthManage(String date) {
-        String[] dates = date.split("\\.");
+        String[] dates = date.split("-");
         int monthInt;
         String month;
 
@@ -185,11 +188,11 @@ public class CheckService {
     }
 
     public static String dayManage(String date) {
-        String[] dates = date.split("\\.");
+        String[] dates = date.split("-");
         String day;
         int dayInt;
 
-        dayInt = Integer.parseInt(dates[0]);
+        dayInt = Integer.parseInt(dates[2]);
         day = String.valueOf(dayInt);
 
         return day;
