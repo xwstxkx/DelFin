@@ -91,6 +91,7 @@ public class BudgetsCRUDService {
         return BudgetModel.toListModel(page.getContent());
     }
 
+    @Transactional
     public void deleteBudget(Long id) {
         budgetRepository.deleteByIdAndUser(id, getUser());
         log.info("Бюджет успешно удалён");

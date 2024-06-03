@@ -1,5 +1,6 @@
 package org.xwstxkx.service.crud;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class LoansCRUDService {
         return LoanModel.toListModel(loan);
     }
 
+    @Transactional
     public String deleteLoan(Long id) {
         loanRepository.deleteByIdAndUser(id, getUser());
         log.info("Займ удалён успешно");

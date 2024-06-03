@@ -1,5 +1,6 @@
 package org.xwstxkx.service.crud;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,7 @@ public class ExpensesCRUDService {
         return ExpenseModel.toListModel(expenses);
     }
 
+    @Transactional
     public String deleteExpense(Long id) {
         expenseRepository.deleteByIdAndUser(id, getUser());
         log.info("Расход удалён успешно");

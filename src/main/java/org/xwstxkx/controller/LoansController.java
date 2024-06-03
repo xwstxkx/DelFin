@@ -23,7 +23,7 @@ public class LoansController {
 
     @GetMapping("/getLoan/{id}")
     @Operation(summary = "Нахождение займа")
-    public ResponseEntity<LoanModel> getLoan(@PathVariable Long id) throws ObjectNotFound {
+    public ResponseEntity<LoanModel> getLoan(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(loansCRUDService.getLoan(id));
@@ -40,6 +40,7 @@ public class LoansController {
     public String changeBudget(@RequestBody LoanModel loanModel) throws ObjectNotFound, BadCredentials {
         return loansCRUDService.saveLoan(loanModel);
     }
+
 
     @DeleteMapping("/deleteLoan")
     @Operation(summary = "Удаление займа")

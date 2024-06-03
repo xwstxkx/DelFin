@@ -43,9 +43,9 @@ public class CategoriesController {
         return categoriesCRUDService.saveCategory(categoryModel);
     }
 
-    @DeleteMapping("/deleteCategory")
+    @DeleteMapping("/deleteCategory/{id}")
     @Operation(summary = "Удаление категории")
-    public String saveCategory(@RequestParam Long id) {
+    public String saveCategory(@PathVariable Long id) {
         return categoriesCRUDService.deleteCategory(id);
     }
 

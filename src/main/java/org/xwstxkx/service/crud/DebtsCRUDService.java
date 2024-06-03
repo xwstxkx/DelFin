@@ -1,12 +1,12 @@
 package org.xwstxkx.service.crud;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.DebtEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.BadCredentials;
-import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.model.DebtsModel;
 import org.xwstxkx.repository.DebtsRepository;
 import org.xwstxkx.service.security.UserService;
@@ -51,6 +51,7 @@ public class DebtsCRUDService {
         return DebtsModel.toListModel(debts);
     }
 
+    @Transactional
     public String deleteDebt(Long id) {
         debtsRepository.deleteByIdAndUser(id, getUser());
         log.info("Долг удалён успешно");

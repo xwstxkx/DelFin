@@ -43,9 +43,9 @@ public class ExpensesController {
         return expensesCRUDService.saveExpense(expenseModel, category_id);
     }
 
-    @DeleteMapping("/deleteExpense")
+    @DeleteMapping("/deleteExpense/{id}")
     @Operation(summary = "Удаление рахода")
-    public String saveBudget(@RequestParam Long id) {
+    public String saveBudget(@PathVariable Long id) {
         return expensesCRUDService.deleteExpense(id);
     }
 

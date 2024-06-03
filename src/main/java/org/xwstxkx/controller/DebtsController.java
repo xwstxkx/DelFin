@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xwstxkx.exceptions.BadCredentials;
-import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.model.DebtsModel;
 import org.xwstxkx.service.crud.DebtsCRUDService;
 
@@ -23,8 +22,7 @@ public class DebtsController {
 
     @GetMapping("/getDebt/{id}")
     @Operation(summary = "Нахождение долга")
-    public ResponseEntity<DebtsModel> getDebt(@PathVariable Long id)
-            throws ObjectNotFound {
+    public ResponseEntity<DebtsModel> getDebt(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(debtsCRUDService.getDebt(id));
@@ -44,9 +42,9 @@ public class DebtsController {
         return debtsCRUDService.saveDebt(debtModel);
     }
 
-    @DeleteMapping("/deleteDebt")
+    @DeleteMapping("/deleteDebt/{id}")
     @Operation(summary = "Удаление долга")
-    public String saveDebt(@RequestParam Long id) {
+    public String saveDebt(@PathVariable Long id) {
         return debtsCRUDService.deleteDebt(id);
     }
 
