@@ -22,7 +22,7 @@ public class DebtsCRUDService {
     private final UserService userService;
 
     UserEntity getUser() {
-        return userService.findUser();
+        return userService.getCurrentUser();
     }
 
 

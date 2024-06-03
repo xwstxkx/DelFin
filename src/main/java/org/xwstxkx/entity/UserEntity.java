@@ -44,6 +44,8 @@ public class UserEntity implements UserDetails {
     private List<IncomeEntity> incomes;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<LoanEntity> loans;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<CategoryEntity> categories;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

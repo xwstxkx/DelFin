@@ -25,7 +25,7 @@ public class ExpensesCRUDService {
     private final UserService userService;
 
     UserEntity getUser() {
-        return userService.findUser();
+        return userService.getCurrentUser();
     }
 
     public String saveExpense(ExpenseModel model, Long category_id)

@@ -26,7 +26,7 @@ public class BudgetEntity {
     @NotNull
     @Size(min = 3, max = 100)
     private String title;
-    @Column(name = "periodEnd")
+    @Column(name = "period_end")
     private LocalDate periodEnd;
     @Column(name = "sum")
     private Long sum; //!!!В копейках

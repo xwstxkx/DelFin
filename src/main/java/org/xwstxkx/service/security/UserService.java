@@ -1,24 +1,25 @@
 package org.xwstxkx.service.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.ObjectWithThisNameIsAlreadyExists;
 import org.xwstxkx.repository.UserRepository;
 import org.xwstxkx.util.Role;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public String saveUser(UserEntity user) {
+    public void saveUser(UserEntity user) {
         userRepository.save(user);
-        return "Пользователь сохранён";
+        log.info("Пользователь успешно сохранён!");
     }
 
     public void createUser(UserEntity user) throws ObjectWithThisNameIsAlreadyExists {
@@ -35,7 +36,6 @@ public class UserService {
 
     public UserEntity getByUsername(String username) {
         return userRepository.findByUsername(username);
-
     }
 
     public UserDetailsService userDetailsService() {
@@ -53,11 +53,5 @@ public class UserService {
         var user = getCurrentUser();
         user.setRole(Role.ROLE_ADMIN);
         saveUser(user);
-    }
-
-    public UserEntity findUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        return userRepository.findByUsername(currentPrincipalName);
     }
 }

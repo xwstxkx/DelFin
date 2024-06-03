@@ -26,7 +26,7 @@ public class IncomesCRUDService {
     private final UserService userService;
 
     UserEntity getUser() {
-        return userService.findUser();
+        return userService.getCurrentUser();
     }
 
     public String saveIncome(IncomeModel model, Long category_id)

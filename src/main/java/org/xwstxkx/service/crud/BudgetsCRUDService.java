@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.BudgetEntity;
-import org.xwstxkx.entity.CategoryEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
@@ -17,7 +16,6 @@ import org.xwstxkx.model.CategoryModel;
 import org.xwstxkx.repository.BudgetRepository;
 import org.xwstxkx.service.security.UserService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -30,7 +28,7 @@ public class BudgetsCRUDService {
     private final CategoriesCRUDService categoriesCRUDService;
 
     UserEntity getUser() {
-        return userService.findUser();
+        return userService.getCurrentUser();
     }
 
 
@@ -46,12 +44,12 @@ public class BudgetsCRUDService {
         if (budgetEntity.getUser() != null && budgetEntity.getUser() != getUser()) {
             throw new BadCredentials();
         } else {
-            budgetEntity.setUser(userService.findUser());
+            budgetEntity.setUser(userService.getCurrentUser());
             budgetEntity.setCategory(CategoryModel.toEntity(
                     categoriesCRUDService.getCategory(category_id))
             );
             int count = 0;
-            List<BudgetEntity> budgetEntities = budgetRepository.findAllByUser(userService.findUser());
+            List<BudgetEntity> budgetEntities = budgetRepository.findAllByUser(userService.getCurrentUser());
             for (BudgetEntity entity : budgetEntities) {
                 if (budgetEntity.getTitle().equals(entity.getTitle())) {
                     count++;
@@ -63,25 +61,6 @@ public class BudgetsCRUDService {
             budgetRepository.save(budgetEntity);
             log.info("Бюджет сохранён");
         }
-    }
-
-    public void createBudgetSignup(UserEntity user) throws ObjectNotFound {
-        if (categoriesCRUDService.getAllCategories().equals(List.of())) {
-            CategoryEntity categoryEntity = CategoryEntity.builder()
-                    .name("Общая категория")
-                    .build();
-            categoriesCRUDService.saveCategory(CategoryModel.toModel(categoryEntity));
-        }
-        BudgetEntity mainBudget = BudgetEntity.builder()
-                .title("Общий бюджет")
-                .periodEnd(LocalDate.now().plusYears(10))
-                .category(CategoryModel.toEntity(categoriesCRUDService
-                        .getCategoryByName("Общая категория")))
-                .sum(100000L)
-                .user(user)
-                .build();
-        budgetRepository.save(mainBudget);
-        log.info("Создан основной бюджет для пользователя '{}'", user.getUsername());
     }
 
     public List<BudgetModel> getAllBudgets(PageRequest pageRequest) {

@@ -27,6 +27,9 @@ public class CategoryEntity {
     private List<ExpenseEntity> expenses;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<BudgetEntity> budgets;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    public UserEntity user;
 
     public List<IncomeEntity> getIncomes() {
         if (incomes == null) {
