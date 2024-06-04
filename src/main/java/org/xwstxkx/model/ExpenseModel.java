@@ -29,9 +29,6 @@ public class ExpenseModel {
     @Schema(description = "Категория")
     @NotBlank(message = "Категория должна быть выбрана")
     private Long category_id;
-    @Schema(description = "Бюджет")
-    @NotBlank(message = "Бюджет должен быть выбран")
-    private Long budget_id;
     @Schema(description = "Дата расхода")
     @NotBlank(message = "Дата расхода не может быть пустой")
     private LocalDate date;

@@ -38,4 +38,7 @@ public class ExpenseEntity {
     @ManyToOne
     @JoinColumn(name = "budget_id")
     private BudgetEntity budget;
+    @ManyToOne
+    @JoinColumn(name = "main_budget_id")
+    private MainBudgetEntity mainBudget;
 }

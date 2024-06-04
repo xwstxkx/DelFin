@@ -40,6 +40,9 @@ public class BudgetEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
+    @ManyToOne
+    @JoinColumn(name = "main_budget_id")
+    private MainBudgetEntity mainBudget;
 
     public List<IncomeEntity> getIncomes() {
         if (incomes == null) {
