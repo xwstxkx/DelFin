@@ -29,23 +29,25 @@ public class IncomesController {
                 .body(incomesCRUDService.getIncome(id));
     }
 
-    @PostMapping("/saveIncome/{category_id}")
+    @PostMapping("/saveIncome/{category_id}/{budget_id}")
     @Operation(summary = "Сохранение дохода")
     public String saveIncome(@RequestBody IncomeModel incomeModel,
-                             @PathVariable Long category_id) throws ObjectNotFound, BadCredentials {
-        return incomesCRUDService.saveIncome(incomeModel, category_id);
+                             @PathVariable Long category_id,
+                             @PathVariable Long budget_id) throws ObjectNotFound, BadCredentials {
+        return incomesCRUDService.saveIncome(incomeModel, category_id, budget_id);
     }
 
-    @PutMapping("/changeIncome/{category_id}")
+    @PutMapping("/changeIncome/{category_id}/{budget_id}")
     @Operation(summary = "Сохранение дохода")
     public String changeIncome(@RequestBody IncomeModel incomeModel,
-                               @PathVariable Long category_id) throws ObjectNotFound, BadCredentials {
-        return incomesCRUDService.saveIncome(incomeModel, category_id);
+                               @PathVariable Long category_id,
+                               @PathVariable Long budget_id) throws ObjectNotFound, BadCredentials {
+        return incomesCRUDService.saveIncome(incomeModel, category_id, budget_id);
     }
 
     @DeleteMapping("/deleteIncome/{id}")
     @Operation(summary = "Удаление дохода")
-    public String saveBudget(@PathVariable Long id) {
+    public String deleteIncome(@PathVariable Long id) {
         return incomesCRUDService.deleteIncomes(id);
     }
 

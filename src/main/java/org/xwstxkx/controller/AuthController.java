@@ -4,16 +4,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.xwstxkx.exceptions.ObjectNotFound;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.xwstxkx.exceptions.ObjectWithThisNameIsAlreadyExists;
 import org.xwstxkx.model.security.JwtResponse;
 import org.xwstxkx.model.security.SignInRequest;
 import org.xwstxkx.model.security.SignUpRequest;
 import org.xwstxkx.service.security.AuthenticationService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,7 +25,7 @@ public class AuthController {
     @Operation(summary = "Регистрация пользователя")
     @PostMapping("/sign-up")
     public JwtResponse signUp(@RequestBody @Valid SignUpRequest request)
-            throws ObjectWithThisNameIsAlreadyExists, ObjectNotFound {
+            throws ObjectWithThisNameIsAlreadyExists {
         return authenticationService.signUp(request);
     }
 

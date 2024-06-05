@@ -29,23 +29,25 @@ public class ExpensesController {
                 .body(expensesCRUDService.getExpense(id));
     }
 
-    @PostMapping("/saveExpense/{category_id}")
+    @PostMapping("/saveExpense/{category_id}/{budget_id}")
     @Operation(summary = "Сохранение расхода")
     public String saveExpense(@RequestBody ExpenseModel expenseModel,
-                              @PathVariable Long category_id) throws ObjectNotFound, BadCredentials {
-        return expensesCRUDService.saveExpense(expenseModel, category_id);
+                              @PathVariable Long category_id,
+                              @PathVariable Long budget_id) throws ObjectNotFound, BadCredentials {
+        return expensesCRUDService.saveExpense(expenseModel, category_id, budget_id);
     }
 
-    @PutMapping("/changeExpense/{category_id}")
+    @PutMapping("/changeExpense/{category_id}/{budget_id}")
     @Operation(summary = "Сохранение расхода")
     public String changeExpense(@RequestBody ExpenseModel expenseModel,
-                                @PathVariable Long category_id) throws ObjectNotFound, BadCredentials {
-        return expensesCRUDService.saveExpense(expenseModel, category_id);
+                                @PathVariable Long category_id,
+                                @PathVariable Long budget_id) throws ObjectNotFound, BadCredentials {
+        return expensesCRUDService.saveExpense(expenseModel, category_id, budget_id);
     }
 
     @DeleteMapping("/deleteExpense/{id}")
     @Operation(summary = "Удаление рахода")
-    public String saveBudget(@PathVariable Long id) {
+    public String deleteExpense(@PathVariable Long id) {
         return expensesCRUDService.deleteExpense(id);
     }
 

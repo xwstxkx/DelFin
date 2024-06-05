@@ -26,6 +26,12 @@ public class BudgetEntity {
     @NotNull
     @Size(min = 3, max = 100)
     private String title;
+    @Column(name = "is_refreshed")
+    private boolean isRefreshed;
+    @NotNull
+    @Column(name = "period_begin")
+    private LocalDate periodBegin;
+    @NotNull
     @Column(name = "period_end")
     private LocalDate periodEnd;
     @Column(name = "sum")

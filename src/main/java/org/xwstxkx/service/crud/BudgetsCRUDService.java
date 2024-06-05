@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.BudgetEntity;
+import org.xwstxkx.entity.MainBudgetEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
@@ -14,6 +15,8 @@ import org.xwstxkx.exceptions.ObjectWithThisNameIsAlreadyExists;
 import org.xwstxkx.model.BudgetModel;
 import org.xwstxkx.model.CategoryModel;
 import org.xwstxkx.repository.BudgetRepository;
+import org.xwstxkx.repository.MainBudgetRepository;
+import org.xwstxkx.service.BudgetService;
 import org.xwstxkx.service.security.UserService;
 
 import java.util.List;
@@ -26,15 +29,26 @@ public class BudgetsCRUDService {
     private final BudgetRepository budgetRepository;
     private final UserService userService;
     private final CategoriesCRUDService categoriesCRUDService;
+    private final BudgetService budgetService;
+    private final MainBudgetRepository mainBudgetRepository;
 
-    UserEntity getUser() {
+    private UserEntity getUser() {
         return userService.getCurrentUser();
     }
 
+    public MainBudgetEntity getMainBudget() {
+        return mainBudgetRepository.findByUser(getUser());
+    }
 
-    public BudgetModel getBudget(Long id) {
-        return BudgetModel.toModel(budgetRepository
-                .findByIdAndUser(id, getUser()));
+
+    public BudgetModel getBudget(Long id) throws ObjectNotFound {
+        BudgetEntity entity = budgetRepository.findByIdAndUser(id, getUser());
+        if (budgetService.isBudgetValid(id)) {
+            return BudgetModel.toModel(entity);
+        } else if (!budgetService.isBudgetValid(id) && !entity.isRefreshed()) {
+            return null;
+        }
+        return null;
     }
 
     @Transactional
@@ -48,6 +62,7 @@ public class BudgetsCRUDService {
             budgetEntity.setCategory(CategoryModel.toEntity(
                     categoriesCRUDService.getCategory(category_id))
             );
+            budgetEntity.setMainBudget(getUser().getMainBudget());
             int count = 0;
             List<BudgetEntity> budgetEntities = budgetRepository.findAllByUser(userService.getCurrentUser());
             for (BudgetEntity entity : budgetEntities) {

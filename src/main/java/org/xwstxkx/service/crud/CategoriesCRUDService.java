@@ -1,5 +1,6 @@
 package org.xwstxkx.service.crud;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,9 @@ public class CategoriesCRUDService {
 
     public String saveCategory(CategoryModel model) throws ObjectNotFound {
         if (!model.getName().equals("Общая категория")) {
-            categoryRepository.save(CategoryModel.toEntity(model));
+            CategoryEntity entity = CategoryModel.toEntity(model);
+            entity.setUser(getUser());
+            categoryRepository.save(entity);
             log.info("Категория сохранена успешно");
             return "Категория сохранена успешно";
         } else return "Категория с таким названием уже существует";
@@ -50,6 +53,7 @@ public class CategoriesCRUDService {
         return CategoryModel.toListModel(categories);
     }
 
+    @Transactional
     public String deleteCategory(Long id) {
         categoryRepository.deleteByIdAndUser(id, getUser());
         log.info("Категория удалена успешно");

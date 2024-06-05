@@ -25,7 +25,7 @@ public class MainBudgetEntity {
     @NotNull
     @Size(min = 3, max = 100)
     private String title;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mainBudget")
@@ -34,5 +34,6 @@ public class MainBudgetEntity {
     private List<IncomeEntity> incomes = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mainBudget")
     private List<BudgetEntity> budgets = new ArrayList<>();
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mainBudget")
+    private List<SavingsBudgetEntity> savingsBudget = new ArrayList<>();
 }

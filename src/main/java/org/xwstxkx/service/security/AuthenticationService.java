@@ -7,7 +7,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.UserEntity;
-import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.exceptions.ObjectWithThisNameIsAlreadyExists;
 import org.xwstxkx.model.security.JwtResponse;
 import org.xwstxkx.model.security.SignInRequest;
@@ -27,7 +26,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public JwtResponse signUp(SignUpRequest request)
-            throws ObjectWithThisNameIsAlreadyExists, ObjectNotFound {
+            throws ObjectWithThisNameIsAlreadyExists {
 
         var user = UserEntity.builder()
                 .username(request.getUsername())
@@ -38,7 +37,7 @@ public class AuthenticationService {
 
         userService.createUser(user);
         log.info("Пользователь создан");
-        signUpService.createSignUpEntities(user);
+        signUpService.createSignUpEntities(userService.getByUsername(request.getUsername()));
         log.info("Базовые бюджеты и категории пользователя созданы");
 
         var jwt = jwtService.generateToken(user);

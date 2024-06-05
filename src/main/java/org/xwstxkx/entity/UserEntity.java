@@ -37,7 +37,9 @@ public class UserEntity implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<BudgetEntity> budgets;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<MainBudgetEntity> mainBudgets;
+    private List<SavingsBudgetEntity> savingsBudget;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private MainBudgetEntity mainBudget;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<DebtEntity> debts;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

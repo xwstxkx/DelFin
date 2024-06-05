@@ -31,20 +31,20 @@ public class LoansController {
 
     @PostMapping("/saveLoan")
     @Operation(summary = "Сохранение займа")
-    public String saveBudget(@RequestBody LoanModel loanModel) throws ObjectNotFound, BadCredentials {
+    public String saveLoan(@RequestBody LoanModel loanModel) throws ObjectNotFound, BadCredentials {
         return loansCRUDService.saveLoan(loanModel);
     }
 
     @PutMapping("/changeLoan")
     @Operation(summary = "Изменение займа")
-    public String changeBudget(@RequestBody LoanModel loanModel) throws ObjectNotFound, BadCredentials {
+    public String changeLoan(@RequestBody LoanModel loanModel) throws ObjectNotFound, BadCredentials {
         return loansCRUDService.saveLoan(loanModel);
     }
 
 
     @DeleteMapping("/deleteLoan")
     @Operation(summary = "Удаление займа")
-    public String saveBudget(@RequestParam Long id) {
+    public String deleteLoan(@RequestParam Long id) {
         return loansCRUDService.deleteLoan(id);
     }
 

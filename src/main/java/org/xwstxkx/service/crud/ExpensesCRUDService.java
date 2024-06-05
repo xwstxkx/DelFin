@@ -9,6 +9,7 @@ import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.model.ExpenseModel;
+import org.xwstxkx.repository.BudgetRepository;
 import org.xwstxkx.repository.CategoryRepository;
 import org.xwstxkx.repository.ExpenseRepository;
 import org.xwstxkx.service.security.UserService;
@@ -22,13 +23,14 @@ public class ExpensesCRUDService {
 
     private final ExpenseRepository expenseRepository;
     private final CategoryRepository categoryRepository;
+    private final BudgetRepository budgetRepository;
     private final UserService userService;
 
     UserEntity getUser() {
         return userService.getCurrentUser();
     }
 
-    public String saveExpense(ExpenseModel model, Long category_id)
+    public String saveExpense(ExpenseModel model, Long category_id, Long budget_id)
             throws ObjectNotFound, BadCredentials {
         ExpenseEntity entity = ExpenseModel.toEntity(model);
         if (entity.getUser() != null && entity.getUser() != getUser()) {
@@ -37,6 +39,9 @@ public class ExpensesCRUDService {
             entity.setUser(getUser());
         entity.setCategory(categoryRepository
                 .findById(category_id)
+                .orElseThrow(ObjectNotFound::new));
+        entity.setBudget(budgetRepository
+                .findById(budget_id)
                 .orElseThrow(ObjectNotFound::new));
         expenseRepository.save(entity);
         log.info("Расход сохранён успешно");

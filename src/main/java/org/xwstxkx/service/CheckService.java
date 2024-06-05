@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.ExpenseEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.ObjectNotFound;
+import org.xwstxkx.model.BudgetModel;
 import org.xwstxkx.model.CategoryModel;
 import org.xwstxkx.model.CheckModel;
 import org.xwstxkx.repository.ExpenseRepository;
+import org.xwstxkx.service.crud.BudgetsCRUDService;
 import org.xwstxkx.service.crud.CategoriesCRUDService;
 import org.xwstxkx.service.security.UserService;
 import org.xwstxkx.util.CategoryType;
@@ -36,6 +38,8 @@ public class CheckService {
     private UserService userService;
     @Autowired
     private CategoriesCRUDService categoriesCRUDService;
+    @Autowired
+    private BudgetsCRUDService budgetsCRUDService;
     @Autowired
     private ExpenseRepository expenseRepository;
 
@@ -62,7 +66,7 @@ public class CheckService {
     private String hubUrl;
 
     @Transactional
-    public Long checkTransaction(CheckModel checkModel, Long category_id) throws MalformedURLException, ObjectNotFound {
+    public Long checkTransaction(CheckModel checkModel, Long category_id, Long budget_id) throws MalformedURLException, ObjectNotFound {
         String check = checkFind(String.valueOf(checkModel.getDate()), checkModel.getUid());
         if (check != null) {
             log.info("Чек найден");
@@ -79,8 +83,11 @@ public class CheckService {
                 .category(CategoryModel.toEntity(
                         categoriesCRUDService.getCategory(category_id))
                 )
+                .budget(BudgetModel.toEntity(
+                        budgetsCRUDService.getBudget(budget_id))
+                )
                 .user(userEntity)
-                .type(CategoryType.valueOf("expense"))
+                .type(CategoryType.valueOf("EXPENSE"))
                 .description(checkModel.getUid())
                 .build();
         expenseRepository.save(expenseEntity);

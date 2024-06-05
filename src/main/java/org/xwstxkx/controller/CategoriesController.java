@@ -22,8 +22,7 @@ public class CategoriesController {
 
     @GetMapping("/getCategory/{id}")
     @Operation(summary = "Нахождение категории")
-    public ResponseEntity<CategoryModel> getCategory(@PathVariable Long id)
-            throws ObjectNotFound {
+    public ResponseEntity<CategoryModel> getCategory(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(categoriesCRUDService.getCategory(id));
@@ -45,7 +44,7 @@ public class CategoriesController {
 
     @DeleteMapping("/deleteCategory/{id}")
     @Operation(summary = "Удаление категории")
-    public String saveCategory(@PathVariable Long id) {
+    public String deleteCategory(@PathVariable Long id) {
         return categoriesCRUDService.deleteCategory(id);
     }
 

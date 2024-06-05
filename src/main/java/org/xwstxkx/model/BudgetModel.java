@@ -17,6 +17,8 @@ public class BudgetModel {
 
     private Long id;
     private String title;
+    private boolean isRefreshed;
+    private LocalDate periodBegin;
     private LocalDate periodEnd;
     private Long sum;
     private Long user_id;
@@ -28,8 +30,10 @@ public class BudgetModel {
         return BudgetModel.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
+                .isRefreshed(entity.isRefreshed())
                 .category_id(entity.getCategory().getId())
                 .sum(entity.getSum())
+                .periodBegin(entity.getPeriodBegin())
                 .periodEnd(entity.getPeriodEnd())
                 .user_id(entity.getUser().getId())
                 .expenses(ExpenseModel.toListModel(entity.getExpenses()))
@@ -49,7 +53,9 @@ public class BudgetModel {
         return BudgetEntity.builder()
                 .id(model.getId())
                 .title(model.getTitle())
+                .isRefreshed(model.isRefreshed())
                 .sum(model.getSum())
+                .periodBegin(model.getPeriodBegin())
                 .periodEnd(model.getPeriodEnd())
                 .expenses(ExpenseModel.toListEntity(model.getExpenses()))
                 .incomes(IncomeModel.toListEntity(model.getIncomes()))
