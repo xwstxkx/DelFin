@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.SavingsBudgetEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.BadCredentials;
-import org.xwstxkx.model.SavingsBudgetModel;
+import org.xwstxkx.model.entity.SavingsBudgetModel;
 import org.xwstxkx.repository.SavingsBudgetRepository;
 import org.xwstxkx.service.security.UserService;
 

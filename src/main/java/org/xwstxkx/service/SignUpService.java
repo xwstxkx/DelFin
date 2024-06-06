@@ -8,7 +8,7 @@ import org.xwstxkx.entity.CategoryEntity;
 import org.xwstxkx.entity.MainBudgetEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.ObjectNotFound;
-import org.xwstxkx.model.CategoryModel;
+import org.xwstxkx.model.entity.CategoryModel;
 import org.xwstxkx.repository.MainBudgetRepository;
 import org.xwstxkx.service.crud.CategoriesCRUDService;
 import org.xwstxkx.service.security.UserService;

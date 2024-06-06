@@ -1,8 +1,18 @@
-//package org.xwstxkx.service;
-//
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//@SpringBootTest
-//class BudgetServiceTest {
-//
-//}
+package org.xwstxkx.service;
+
+import org.junit.jupiter.api.Test;
+
+class BudgetServiceTest {
+
+    @Test
+    void isBudgetValid() {
+    }
+
+    @Test
+    void countBudgetBalance() {
+    }
+
+    @Test
+    void budgetSavingAdd() {
+    }
+}

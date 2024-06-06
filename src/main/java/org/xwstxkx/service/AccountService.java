@@ -3,44 +3,51 @@ package org.xwstxkx.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.xwstxkx.entity.BudgetEntity;
+import org.xwstxkx.entity.CategoryEntity;
+import org.xwstxkx.entity.ExpenseEntity;
+import org.xwstxkx.entity.IncomeEntity;
 import org.xwstxkx.entity.UserEntity;
-import org.xwstxkx.model.BudgetModel;
-import org.xwstxkx.model.MoneyModel;
-import org.xwstxkx.repository.BudgetRepository;
+import org.xwstxkx.model.AccountModel;
+import org.xwstxkx.repository.CategoryRepository;
 import org.xwstxkx.service.security.UserService;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class AccountService {
 
-    private final BudgetRepository budgetRepository;
-    private final BudgetService budgetService;
+    private final CategoryRepository categoryRepository;
     private final UserService userService;
 
     private UserEntity getUser() {
         return userService.getCurrentUser();
     }
 
-    public MoneyModel countAllMoney() {
-        List<BudgetEntity> entities = budgetRepository.findAllByUser(getUser());
-        List<BudgetModel> models = BudgetModel.toListModel(entities);
-        Long balance = 0L;
-        Long total = 0L;
-        Long spent = 0L;
-        for (BudgetModel model : models) {
-            MoneyModel moneyModel = budgetService.countBudgetBalance(model);
-            spent += moneyModel.getSpent();
-            balance += moneyModel.getBalance();
-            total += moneyModel.getTotal();
-        }
-        return MoneyModel.builder()
-                .spent(spent)
+    public Long allCategoryExpenses(LocalDate periodBegin, LocalDate periodEnd, Long id) {
+        CategoryEntity category = categoryRepository.findByIdAndUser(id, getUser());
+        return category.getExpenses().stream()
+                .filter(incomeEntity -> incomeEntity.getDate().isAfter(periodBegin)
+                        && incomeEntity.getDate().isBefore(periodEnd))
+                .mapToLong(ExpenseEntity::getAmount).sum();
+    }
+
+    public AccountModel accountExpensesAndIncomesInPeriod(LocalDate periodBegin, LocalDate periodEnd,
+                                                          String title) {
+        Long total = getUser().getIncomes().stream()
+                .filter(incomeEntity -> incomeEntity.getDate().isAfter(periodBegin)
+                        && incomeEntity.getDate().isBefore(periodEnd))
+                .mapToLong(IncomeEntity::getAmount).sum();
+        Long spent = getUser().getExpenses().stream()
+                .filter(incomeEntity -> incomeEntity.getDate().isAfter(periodBegin)
+                        && incomeEntity.getDate().isBefore(periodEnd))
+                .mapToLong(ExpenseEntity::getAmount).sum();
+        return AccountModel.builder()
+                .title(title)
                 .total(total)
-                .balance(balance)
+                .spent(spent)
+                .balance(total - spent)
                 .build();
     }
 }

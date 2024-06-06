@@ -8,7 +8,7 @@ import org.xwstxkx.entity.LoanEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
-import org.xwstxkx.model.LoanModel;
+import org.xwstxkx.model.entity.LoanModel;
 import org.xwstxkx.repository.LoanRepository;
 import org.xwstxkx.service.security.UserService;
 

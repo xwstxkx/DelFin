@@ -8,7 +8,7 @@ import org.xwstxkx.entity.IncomeEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
-import org.xwstxkx.model.IncomeModel;
+import org.xwstxkx.model.entity.IncomeModel;
 import org.xwstxkx.repository.BudgetRepository;
 import org.xwstxkx.repository.CategoryRepository;
 import org.xwstxkx.repository.IncomeRepository;

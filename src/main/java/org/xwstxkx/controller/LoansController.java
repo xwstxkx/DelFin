@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
-import org.xwstxkx.model.LoanModel;
+import org.xwstxkx.model.entity.LoanModel;
 import org.xwstxkx.service.crud.LoansCRUDService;
 
 import java.util.List;

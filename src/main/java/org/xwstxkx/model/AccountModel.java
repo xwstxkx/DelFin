@@ -9,9 +9,12 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Модель выдачи показателей бюджета")
-public class MoneyModel {
+@Schema(description = "Модель отчёта")
+public class AccountModel {
 
+    @Schema(description = "Название отчёта", example = "Отчёт за май 2024")
+    @NotBlank(message = "Название отчёта не может быть пустым")
+    private String title;
     @Schema(description = "Получено прибылью", example = "10000")
     @NotBlank(message = "Прибыль не должна быть пустой")
     private Long total;

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.DebtEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.BadCredentials;
-import org.xwstxkx.model.DebtsModel;
+import org.xwstxkx.model.entity.DebtsModel;
 import org.xwstxkx.repository.DebtsRepository;
 import org.xwstxkx.service.security.UserService;
 

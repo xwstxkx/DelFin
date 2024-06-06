@@ -11,7 +11,7 @@ import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.exceptions.ObjectWithThisNameIsAlreadyExists;
 import org.xwstxkx.exceptions.ParametersNotSpecified;
-import org.xwstxkx.model.BudgetModel;
+import org.xwstxkx.model.entity.BudgetModel;
 import org.xwstxkx.service.crud.BudgetsCRUDService;
 
 import java.util.List;

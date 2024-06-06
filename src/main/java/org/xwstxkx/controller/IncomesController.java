@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
-import org.xwstxkx.model.IncomeModel;
+import org.xwstxkx.model.entity.IncomeModel;
 import org.xwstxkx.service.crud.IncomesCRUDService;
 
 import java.util.List;

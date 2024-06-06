@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.CategoryEntity;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.ObjectNotFound;
-import org.xwstxkx.model.CategoryModel;
+import org.xwstxkx.model.entity.CategoryModel;
 import org.xwstxkx.repository.CategoryRepository;
 import org.xwstxkx.service.security.UserService;
 

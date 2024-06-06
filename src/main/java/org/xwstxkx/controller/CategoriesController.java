@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xwstxkx.exceptions.ObjectNotFound;
-import org.xwstxkx.model.CategoryModel;
+import org.xwstxkx.model.entity.CategoryModel;
 import org.xwstxkx.service.crud.CategoriesCRUDService;
 
 import java.util.List;

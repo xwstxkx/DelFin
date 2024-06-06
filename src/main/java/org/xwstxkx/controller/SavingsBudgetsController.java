@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xwstxkx.exceptions.BadCredentials;
-import org.xwstxkx.model.SavingsBudgetModel;
+import org.xwstxkx.model.entity.SavingsBudgetModel;
 import org.xwstxkx.service.crud.SavingsBudgetsCRUDService;
 
 import java.util.List;

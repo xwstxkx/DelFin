@@ -1,4 +1,4 @@
-package org.xwstxkx.model;
+package org.xwstxkx.model.entity;
 
 import lombok.*;
 import org.xwstxkx.entity.SavingsBudgetEntity;

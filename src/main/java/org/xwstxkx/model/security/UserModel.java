@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.xwstxkx.entity.UserEntity;
 import org.xwstxkx.exceptions.ObjectNotFound;
-import org.xwstxkx.model.BudgetModel;
+import org.xwstxkx.model.entity.BudgetModel;
 import org.xwstxkx.util.Role;
 
 import java.util.ArrayList;
