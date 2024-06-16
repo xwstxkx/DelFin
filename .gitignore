@@ -33,6 +33,6 @@ build/
 .vscode/
 
 ### DOCKER ###
-/docker-compose.yml
-/Dockerfile
+/rest-api/docker-compose.yml
+/rest-api/Dockerfile
 src/main/resources/application.yaml

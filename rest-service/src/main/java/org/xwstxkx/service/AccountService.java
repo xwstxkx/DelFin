@@ -1,7 +1,6 @@
 package org.xwstxkx.service;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.xwstxkx.entity.CategoryEntity;
 import org.xwstxkx.entity.ExpenseEntity;
@@ -13,7 +12,6 @@ import org.xwstxkx.service.security.UserService;
 
 import java.time.LocalDate;
 
-@Slf4j
 @Service
 @AllArgsConstructor
 public class AccountService {

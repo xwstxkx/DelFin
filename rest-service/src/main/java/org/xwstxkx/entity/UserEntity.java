@@ -2,10 +2,10 @@ package org.xwstxkx.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.xwstxkx.util.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.xwstxkx.util.Role;
 
 import java.util.ArrayList;
 import java.util.Collection;
