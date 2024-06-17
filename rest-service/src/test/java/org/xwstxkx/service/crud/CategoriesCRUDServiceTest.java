@@ -5,22 +5,22 @@ import org.junit.jupiter.api.Test;
 class CategoriesCRUDServiceTest {
 
     @Test
-    void saveCategory() {
+    void saveCategoryTest() {
     }
 
     @Test
-    void getCategory() {
+    void getCategoryTest() {
     }
 
     @Test
-    void getCategoryByName() {
+    void getCategoryByNameTest() {
     }
 
     @Test
-    void getAllCategories() {
+    void getAllCategoriesTest() {
     }
 
     @Test
-    void deleteCategory() {
+    void deleteCategoryTest() {
     }
 }
