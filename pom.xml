@@ -10,7 +10,7 @@
 
     <modules>
         <module>rest-service</module>
-        <module>kafka</module>
+        <module>telegram-bot</module>
     </modules>
 
 </project>

@@ -28,7 +28,8 @@ public class AuthenticationService {
     public JwtResponse signUp(SignUpRequest request)
             throws ObjectWithThisNameIsAlreadyExists {
 
-        var user = UserEntity.builder()
+        var user = UserEntity
+                .builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))

@@ -23,14 +23,11 @@ public class UserService {
     }
 
     public void createUser(UserEntity user) throws ObjectWithThisNameIsAlreadyExists {
-        if (userRepository.existsByUsername(user.getUsername())) {
+        if (userRepository.existsByUsername(user.getUsername())
+                || userRepository.existsByEmail(user.getEmail())
+                || user.getUsername().endsWith("tgbot@3")) {
             throw new ObjectWithThisNameIsAlreadyExists();
         }
-
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new ObjectWithThisNameIsAlreadyExists();
-        }
-
         saveUser(user);
     }
 
