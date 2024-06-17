@@ -10,6 +10,7 @@
 
     <modules>
         <module>rest-service</module>
+        <module>kafka</module>
     </modules>
 
 </project>

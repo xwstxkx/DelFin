@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         name = "Egor",
                         email = "xwstxkx@gmail.com"
                 ),
-                description = "OpenApi documentation for Spring Boot",
+                description = "OpenApi documentation for DelFin",
                 title = "OpenApi specification - Egor",
                 version = "1.0"
         ),
