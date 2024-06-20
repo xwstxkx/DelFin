@@ -30,5 +30,6 @@ public class ConsumerServiceImpl implements ConsumerService {
     @RabbitListener(queues = PHOTO_MESSAGE_UPDATE)
     public void consumePhotoMessageUpdates(Update update) {
         log.debug("NODE: сообщение было доставлено");
+        mainService.processPhotoMessage(update);
     }
 }
