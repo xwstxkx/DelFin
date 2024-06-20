@@ -4,3 +4,9 @@ server:
 bot:
   token: 7229980045:AAFp3IlUV0uzaONiXY0IXj_Y1a9iR_lkin4
   name: delfin_application_bot
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: xwstxkx
+    password: 123321

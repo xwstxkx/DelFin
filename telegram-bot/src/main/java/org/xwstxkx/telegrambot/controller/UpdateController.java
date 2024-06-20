@@ -31,8 +31,7 @@ public class UpdateController {
             log.error("Полученное сообщение является пустым!");
             return;
         }
-
-        if (update.getMessage() != null) {
+        if (update.hasMessage()) {
             distributeMessagesByType(update);
         } else {
             log.error("Получен неподдерживаемый тип сообщения " + update);
@@ -41,9 +40,9 @@ public class UpdateController {
 
     private void distributeMessagesByType(Update update) {
         var message = update.getMessage();
-        if (message.getText() != null) {
+        if (message.hasText()) {
             processTextMessage(update);
-        } else if (message.getPhoto() != null) {
+        } else if (message.hasPhoto()) {
             processPhotoMessage(update);
         } else {
             setUnsupportedMessageTypeView(update);
@@ -56,7 +55,7 @@ public class UpdateController {
         setView(sendMessage);
     }
 
-    private void setView(SendMessage message) {
+    public void setView(SendMessage message) {
         telegramBot.sendAnswerMessage(message);
     }
 
@@ -71,7 +70,8 @@ public class UpdateController {
 
     private void setFileIsReceivedView(Update update) {
         var sendMessage = messageUtils.generateSendMessageWithText(update,
-                "Файл получен! Обрабатывается...");
+                "Файл получен! Обрабатывается... \n" +
+                        "(Функция на данный момент не доступна \uD83D\uDE43)");
         setView(sendMessage);
     }
 }
