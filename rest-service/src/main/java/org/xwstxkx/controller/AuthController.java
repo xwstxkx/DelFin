@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.xwstxkx.exceptions.ObjectWithThisNameIsAlreadyExists;
-import org.xwstxkx.model.security.JwtResponse;
-import org.xwstxkx.model.security.SignInRequest;
-import org.xwstxkx.model.security.SignUpRequest;
-import org.xwstxkx.service.security.AuthenticationService;
+import org.xwstxkx.model.JwtResponse;
+import org.xwstxkx.model.SignInRequest;
+import org.xwstxkx.model.SignUpRequest;
+import org.xwstxkx.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth")

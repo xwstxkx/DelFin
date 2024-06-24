@@ -7,8 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xwstxkx.exceptions.BadCredentials;
+import org.xwstxkx.exceptions.ObjectNotFound;
+import org.xwstxkx.model.UserModel;
 import org.xwstxkx.model.entity.SavingsBudgetModel;
+import org.xwstxkx.service.RestUserService;
 import org.xwstxkx.service.crud.SavingsBudgetsCRUDService;
+import org.xwstxkx.user.RestUser;
 
 import java.util.List;
 
@@ -19,38 +23,42 @@ import java.util.List;
 public class SavingsBudgetsController {
 
     private final SavingsBudgetsCRUDService savingsBudgetsCRUDService;
+    private final RestUserService restUserService;
 
+    private RestUser getUser() {
+        return restUserService.getCurrentUser();
+    }
     @GetMapping("/getSavingsBudget/{id}")
     @Operation(summary = "Нахождение накопительного бюджета")
-    public ResponseEntity<SavingsBudgetModel> getSavingBudget(@PathVariable Long id) {
+    public ResponseEntity<SavingsBudgetModel> getSavingBudget(@PathVariable Long id) throws ObjectNotFound {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(savingsBudgetsCRUDService.getSavingsBudget(id));
+                .body(savingsBudgetsCRUDService.getSavingsBudget(id, UserModel.toModel(getUser())));
     }
 
     @PostMapping("/saveSavingsBudget")
     @Operation(summary = "Сохранение накопительного бюджета")
-    public String saveSavingBudget(@RequestBody SavingsBudgetModel savingBudgetModel) throws BadCredentials {
-        return savingsBudgetsCRUDService.saveSavingsBudget(savingBudgetModel);
+    public String saveSavingBudget(@RequestBody SavingsBudgetModel savingBudgetModel) throws BadCredentials, ObjectNotFound {
+        return savingsBudgetsCRUDService.saveSavingsBudget(savingBudgetModel, UserModel.toModel(getUser()));
     }
 
     @PutMapping("/changeSavingsBudget")
     @Operation(summary = "Сохранение накопительного бюджета")
-    public String changeSavingBudget(@RequestBody SavingsBudgetModel savingBudgetModel) throws BadCredentials {
-        return savingsBudgetsCRUDService.saveSavingsBudget(savingBudgetModel);
+    public String changeSavingBudget(@RequestBody SavingsBudgetModel savingBudgetModel) throws BadCredentials, ObjectNotFound {
+        return savingsBudgetsCRUDService.saveSavingsBudget(savingBudgetModel, UserModel.toModel(getUser()));
     }
 
     @DeleteMapping("/deleteSavingsBudget/{id}")
     @Operation(summary = "Удаление накопительного бюджета")
-    public String deleteSavingBudget(@PathVariable Long id) {
-        return savingsBudgetsCRUDService.deleteSavingsBudget(id);
+    public String deleteSavingBudget(@PathVariable Long id) throws ObjectNotFound {
+        return savingsBudgetsCRUDService.deleteSavingsBudget(id, UserModel.toModel(getUser()));
     }
 
     @GetMapping("/getAllSavingsBudgets")
     @Operation(summary = "Получение всех накопительных бюджетов")
-    public ResponseEntity<List<SavingsBudgetModel>> getAllSavingBudgets() {
+    public ResponseEntity<List<SavingsBudgetModel>> getAllSavingBudgets() throws ObjectNotFound {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(savingsBudgetsCRUDService.getAllSavingBudgets());
+                .body(savingsBudgetsCRUDService.getAllSavingBudgets(UserModel.toModel(getUser())));
     }
 }

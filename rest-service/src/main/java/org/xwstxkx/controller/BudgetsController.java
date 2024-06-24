@@ -11,8 +11,11 @@ import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.exceptions.ObjectWithThisNameIsAlreadyExists;
 import org.xwstxkx.exceptions.ParametersNotSpecified;
+import org.xwstxkx.model.UserModel;
 import org.xwstxkx.model.entity.BudgetModel;
+import org.xwstxkx.service.RestUserService;
 import org.xwstxkx.service.crud.BudgetsCRUDService;
+import org.xwstxkx.user.RestUser;
 
 import java.util.List;
 
@@ -23,11 +26,16 @@ import java.util.List;
 public class BudgetsController {
 
     private final BudgetsCRUDService budgetsCRUDService;
+    private final RestUserService restUserService;
+
+    private RestUser getUser() {
+        return restUserService.getCurrentUser();
+    }
 
     @GetMapping("/getBudget/{id}")
     @Operation(summary = "Просмотр суммы бюджета")
     public BudgetModel getBudget(@PathVariable Long id) throws ObjectNotFound {
-        return budgetsCRUDService.getBudget(id);
+        return budgetsCRUDService.getBudget(id, UserModel.toModel(getUser()));
     }
 
     @PostMapping("/saveBudget/{category_id}")
@@ -35,7 +43,7 @@ public class BudgetsController {
     public String saveBudget(@RequestBody BudgetModel budgetModel,
                              @PathVariable Long category_id) throws ObjectNotFound,
             ObjectWithThisNameIsAlreadyExists, BadCredentials {
-        budgetsCRUDService.budgetSave(budgetModel, category_id);
+        budgetsCRUDService.budgetSave(budgetModel, category_id, UserModel.toModel(getUser()));
         return "Бюджет успешно сохранён";
     }
 
@@ -44,13 +52,14 @@ public class BudgetsController {
     public ResponseEntity<List<BudgetModel>> getAllBudgets(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size)
-            throws ParametersNotSpecified {
+            throws ParametersNotSpecified, ObjectNotFound {
         if (page < 0 || size < 1) {
             throw new ParametersNotSpecified();
         }
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(budgetsCRUDService.getAllBudgets(PageRequest.of(page, size)));
+                .body(budgetsCRUDService.getAllBudgets(PageRequest.of(page, size),
+                        UserModel.toModel(getUser())));
     }
 
     @PutMapping("/changeBudget/{category_id}")
@@ -58,14 +67,14 @@ public class BudgetsController {
     public String changeBudget(@RequestBody BudgetModel budgetModel,
                                @PathVariable Long category_id) throws ObjectNotFound,
             ObjectWithThisNameIsAlreadyExists, BadCredentials {
-        budgetsCRUDService.budgetSave(budgetModel, category_id);
+        budgetsCRUDService.budgetSave(budgetModel, category_id, UserModel.toModel(getUser()));
         return "Бюджет успешно сохранён";
     }
 
     @DeleteMapping("/delete/{id}")
     @Operation(summary = "Удаление бюджета")
-    public String saveBudget(@PathVariable Long id) {
-        budgetsCRUDService.deleteBudget(id);
+    public String saveBudget(@PathVariable Long id) throws ObjectNotFound {
+        budgetsCRUDService.deleteBudget(id, UserModel.toModel(getUser()));
         return "Бюджет успешно удалён";
     }
 }

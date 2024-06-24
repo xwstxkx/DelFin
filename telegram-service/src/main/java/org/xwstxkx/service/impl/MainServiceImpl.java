@@ -4,10 +4,11 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.xwstxkx.dao.AppUserDao;
 import org.xwstxkx.dao.RawDataDao;
-import org.xwstxkx.entity.AppUser;
 import org.xwstxkx.entity.RawData;
+import org.xwstxkx.entity.UserEntity;
+import org.xwstxkx.exceptions.ObjectNotFound;
+import org.xwstxkx.repository.UserRepository;
 import org.xwstxkx.service.MainService;
 import org.xwstxkx.service.ProducerService;
 import org.xwstxkx.service.enums.ServiceCommands;
@@ -21,19 +22,19 @@ import static org.xwstxkx.service.enums.ServiceCommands.*;
 public class MainServiceImpl implements MainService {
     private final RawDataDao rawDataDao;
     private final ProducerService producerService;
-    private final AppUserDao appUserDao;
+    private final UserRepository userRepository;
 
     public MainServiceImpl(
             RawDataDao rawDataDao, ProducerService producerService,
-            AppUserDao appUserDao
+            UserRepository userRepository
     ) {
         this.rawDataDao = rawDataDao;
         this.producerService = producerService;
-        this.appUserDao = appUserDao;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public void processTextMessage(Update update) {
+    public void processTextMessage(Update update) throws ObjectNotFound {
         saveRawData(update);
         var appUser = findOrSaveAppUser(update);
         var userState = appUser.getUserState();
@@ -61,9 +62,9 @@ public class MainServiceImpl implements MainService {
         //TODO здесь будет сканирование чека или анализ другой иной информации из изображений
     }
 
-    private boolean isNotAllowToSendContent(Long chatId, AppUser appUser) {
-        var userState = appUser.getUserState();
-        if (!appUser.getIsActive()) {
+    private boolean isNotAllowToSendContent(Long chatId, UserEntity userEntity) {
+        var userState = userEntity.getUserState();
+        if (!userEntity.getIsActive()) {
             var error = "Зарегистрируйтесь или активируйте свою учётную запись" +
                     "для отправки контента";
             sendAnswer(error, chatId);
@@ -81,10 +82,10 @@ public class MainServiceImpl implements MainService {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText(output);
-        producerService.produceAnwer(sendMessage);
+        producerService.produceAnswer(sendMessage);
     }
 
-    private String processServiceCommand(AppUser appUser, String cmd) {
+    private String processServiceCommand(UserEntity userEntity, String cmd) {
         var serviceCommand = ServiceCommands.fromValue(cmd);
         if (REGISTRATION.equals(serviceCommand)) {
             //TODO добавить регистрацию
@@ -104,17 +105,18 @@ public class MainServiceImpl implements MainService {
                 "/registration - регистрация пользователя.";
     }
 
-    private String cancelProcess(AppUser appUser) {
-        appUser.setUserState(BASIC_STATE);
-        appUserDao.save(appUser);
+    private String cancelProcess(UserEntity userEntity) {
+        userEntity.setUserState(BASIC_STATE);
+        userRepository.save(userEntity);
         return "Команда отменена!";
     }
 
-    private AppUser findOrSaveAppUser(Update update) {
+    private UserEntity findOrSaveAppUser(Update update) throws ObjectNotFound {
         var telegramUser = update.getMessage().getFrom();
-        AppUser persistentUser = appUserDao.findByTelegramUserId(telegramUser.getId());
+        UserEntity persistentUser = userRepository.findByTelegramUserId(telegramUser.getId())
+                .orElseThrow(ObjectNotFound::new);
         if (persistentUser == null) {
-            AppUser transientUser = AppUser.builder()
+            UserEntity transientUser = UserEntity.builder()
                     .telegramUserId(telegramUser.getId())
                     .username(telegramUser.getUserName())
                     .firstname(telegramUser.getFirstName())
@@ -122,7 +124,7 @@ public class MainServiceImpl implements MainService {
                     //TODO Заменить значение по умолчанию после добавления регистрации по почте
                     .isActive(false)
                     .build();
-            return appUserDao.save(transientUser);
+            return userRepository.save(transientUser);
         }
         return persistentUser;
     }

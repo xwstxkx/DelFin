@@ -11,8 +11,8 @@
 	<groupId>org.xwstxkx</groupId>
 	<artifactId>telegram-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>node</name>
-	<description>node</description>
+	<name>telegram-service</name>
+	<description>telegram-service</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -90,7 +90,7 @@
 
 		<dependency>
 			<groupId>org.xwstxkx</groupId>
-			<artifactId>jpa</artifactId>
+			<artifactId>main-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

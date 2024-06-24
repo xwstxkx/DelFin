@@ -8,8 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.xwstxkx.exceptions.BadCredentials;
 import org.xwstxkx.exceptions.ObjectNotFound;
+import org.xwstxkx.model.UserModel;
 import org.xwstxkx.model.entity.LoanModel;
+import org.xwstxkx.service.RestUserService;
 import org.xwstxkx.service.crud.LoansCRUDService;
+import org.xwstxkx.user.RestUser;
 
 import java.util.List;
 
@@ -20,39 +23,44 @@ import java.util.List;
 public class LoansController {
 
     private final LoansCRUDService loansCRUDService;
+    private final RestUserService restUserService;
+
+    private RestUser getUser() {
+        return restUserService.getCurrentUser();
+    }
 
     @GetMapping("/getLoan/{id}")
     @Operation(summary = "Нахождение займа")
-    public ResponseEntity<LoanModel> getLoan(@PathVariable Long id) {
+    public ResponseEntity<LoanModel> getLoan(@PathVariable Long id) throws ObjectNotFound {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(loansCRUDService.getLoan(id));
+                .body(loansCRUDService.getLoan(id, UserModel.toModel(getUser())));
     }
 
     @PostMapping("/saveLoan")
     @Operation(summary = "Сохранение займа")
     public String saveLoan(@RequestBody LoanModel loanModel) throws ObjectNotFound, BadCredentials {
-        return loansCRUDService.saveLoan(loanModel);
+        return loansCRUDService.saveLoan(loanModel, UserModel.toModel(getUser()));
     }
 
     @PutMapping("/changeLoan")
     @Operation(summary = "Изменение займа")
     public String changeLoan(@RequestBody LoanModel loanModel) throws ObjectNotFound, BadCredentials {
-        return loansCRUDService.saveLoan(loanModel);
+        return loansCRUDService.saveLoan(loanModel, UserModel.toModel(getUser()));
     }
 
 
     @DeleteMapping("/deleteLoan")
     @Operation(summary = "Удаление займа")
-    public String deleteLoan(@RequestParam Long id) {
-        return loansCRUDService.deleteLoan(id);
+    public String deleteLoan(@RequestParam Long id) throws ObjectNotFound {
+        return loansCRUDService.deleteLoan(id, UserModel.toModel(getUser()));
     }
 
     @GetMapping("/getAllLoans")
     @Operation(summary = "Получение всех займов")
-    public ResponseEntity<List<LoanModel>> getAllBudgets() {
+    public ResponseEntity<List<LoanModel>> getAllBudgets() throws ObjectNotFound {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(loansCRUDService.getAllLoans());
+                .body(loansCRUDService.getAllLoans(UserModel.toModel(getUser())));
     }
 }

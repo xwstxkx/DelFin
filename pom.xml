@@ -13,7 +13,7 @@
         <module>telegram-service</module>
         <module>telegram-bot</module>
         <module>rabbitmq</module>
-        <module>jpa</module>
+        <module>main-service</module>
     </modules>
 
 </project>
