@@ -10,9 +10,9 @@
 
     <modules>
         <module>rest-service</module>
+        <module>telegram-service</module>
         <module>telegram-bot</module>
         <module>rabbitmq</module>
-        <module>node</module>
         <module>jpa</module>
     </modules>
 

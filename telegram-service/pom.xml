@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.xwstxkx</groupId>
-	<artifactId>node</artifactId>
+	<artifactId>telegram-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>node</name>
 	<description>node</description>

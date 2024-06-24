@@ -1,6 +1,9 @@
 server:
   port: 8082
 
+bot:
+  token: 7229980045:AAFp3IlUV0uzaONiXY0IXj_Y1a9iR_lkin4
+
 spring:
   rabbitmq:
     host: localhost
