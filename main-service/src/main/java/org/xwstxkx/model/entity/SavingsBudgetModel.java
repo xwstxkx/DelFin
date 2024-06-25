@@ -43,11 +43,5 @@ public class SavingsBudgetModel {
                 .build();
     }
 
-    public static List<SavingsBudgetEntity> toListEntity(List<SavingsBudgetModel> models) {
-        List<SavingsBudgetEntity> entities = new ArrayList<>();
-        for (SavingsBudgetModel model : models) {
-            entities.add(toEntity(model));
-        }
-        return entities;
-    }
+
 }

@@ -1,6 +1,6 @@
 package org.xwstxkx.service.impl;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,26 +11,29 @@ import org.xwstxkx.exceptions.ObjectNotFound;
 import org.xwstxkx.repository.UserRepository;
 import org.xwstxkx.service.MainService;
 import org.xwstxkx.service.ProducerService;
+import org.xwstxkx.service.UserService;
 import org.xwstxkx.service.enums.ServiceCommands;
 
 import static org.xwstxkx.entity.UserState.BASIC_STATE;
 import static org.xwstxkx.entity.UserState.WAIT_FOR_EMAIL_STATE;
 import static org.xwstxkx.service.enums.ServiceCommands.*;
 
-@Log4j
+@Log4j2
 @Service
 public class MainServiceImpl implements MainService {
     private final RawDataDao rawDataDao;
     private final ProducerService producerService;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     public MainServiceImpl(
             RawDataDao rawDataDao, ProducerService producerService,
-            UserRepository userRepository
+            UserRepository userRepository, UserService userService
     ) {
         this.rawDataDao = rawDataDao;
         this.producerService = producerService;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class MainServiceImpl implements MainService {
         } else if (BASIC_STATE.equals(userState)) {
             output = processServiceCommand(appUser, text);
         } else if (WAIT_FOR_EMAIL_STATE.equals(userState)) {
-            //TODO подтверждение через электронную почту
+            output = userService.setEmail(appUser, text);
         } else {
             log.error("Неизвестное состояние пользователя: " + userState);
             output = "Неизвестная ошибка! Введите /cancel и попробуйте снова!";
@@ -88,8 +91,7 @@ public class MainServiceImpl implements MainService {
     private String processServiceCommand(UserEntity userEntity, String cmd) {
         var serviceCommand = ServiceCommands.fromValue(cmd);
         if (REGISTRATION.equals(serviceCommand)) {
-            //TODO добавить регистрацию
-            return "Временно недоступно.";
+            return userService.registerUser(userEntity);
         } else if (HELP.equals(serviceCommand)) {
             return help();
         } else if (START.equals(serviceCommand)) {
@@ -121,7 +123,6 @@ public class MainServiceImpl implements MainService {
                     .username(telegramUser.getUserName())
                     .firstname(telegramUser.getFirstName())
                     .lastname(telegramUser.getLastName())
-                    //TODO Заменить значение по умолчанию после добавления регистрации по почте
                     .isActive(false)
                     .build();
             return userRepository.save(transientUser);

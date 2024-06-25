@@ -6,3 +6,5 @@ spring:
     port: 5672
     username: xwstxkx
     password: 123321
+server:
+  port: 8084

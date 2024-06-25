@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: mail-service
+#  mail:
+#    host: smtp.yandex.ru
+#    port: 465
+#    protocol: smtps
+#    username: xwstxkx@yandex.by
+#    password: oemdpaakssldppaz
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+
+
+server:
+  port: 8083
+

@@ -64,7 +64,7 @@ public class BudgetsCRUDService {
             budgetEntity.setCategory(CategoryModel.toEntity(
                     categoriesCRUDService.getCategory(category_id, userModel))
             );
-            budgetEntity.setMainBudget(user.getMainBudget());
+//            budgetEntity.setMainBudget(user.getMainBudget());
             int count = 0;
             List<BudgetEntity> budgetEntities = budgetRepository.findAllByUser(user);
             for (BudgetEntity entity : budgetEntities) {

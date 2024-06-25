@@ -4,6 +4,10 @@ server:
 bot:
   token: 7229980045:AAFp3IlUV0uzaONiXY0IXj_Y1a9iR_lkin4
 
+service:
+  mail:
+    uri: http://127.0.0.1:8087/mail/send
+
 spring:
   rabbitmq:
     host: localhost
